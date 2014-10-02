@@ -1,0 +1,59 @@
+﻿body
+{
+    font-family: 'Segoe UI', sans-serif
+}
+
+span {
+    font-style: italic
+}
+
+#parameters {
+  position: absolute;
+  right: 5em;
+  top: 2em;
+}
+
+#view3D {
+  visibility: hidden;
+  position: absolute;
+  width: 75%;
+  height: 75%;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  border: 2px solid black;
+  z-index: 10;
+}
+
+#help3D {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 10pt;
+}
+
+#stats3D {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+#buttons3D {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#screensize3D {
+  float: right;
+  background-image: url("Images/fullscreen-button.png");
+  width: 32px;
+  height: 32px;
+}
+
+#close3D {
+  float: right;
+  background-image: url("Images/close-button.png");
+  width: 32px;
+  height: 32px;
+}

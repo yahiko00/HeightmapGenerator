@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Heightmap</title>
+  <link rel="stylesheet" href="heightmap.css" type="text/css" />
+  <script src="Scripts/rng/rng.js"></script>
+  <script src="Scripts/diamondsquare/diamondsquare.js"></script>
+  <script src="heightmap.js"></script>
+  <script src="Scripts/jquery/jquery-2.1.1.js"></script>
+  <script src="Scripts/three/three.js"></script>
+  <script src="Scripts/three/Detector.js"></script>
+  <script src="Scripts/three/FirstPersonControls.js"></script>
+  <script src="Scripts/three/stats.min.js"></script>
+  <script src="heightmapUI.js"></script>
+</head>
+<body>
+  <h2>Heightmap Generator</h2>
+  <div id="view2D"></div>
+  <div id="view3D"></div>
+
+  <div id="parameters">
+    <h3>Parameters</h3>
+    <span>Seed : </span><input type="text" id="seed" /><input type="button" id="seedTime" value="Time" /><br />
+    <span>Width (px): </span><input type="text" id="width" size="10" /><br />
+    <span>Height (px): </span><input type="text" id="height" size="10" /><br />
+    <span>Wrap: </span><input type="radio" name="wrap" id="wrapNo" />No <input type="radio" name="wrap" id="wrapYes" /> Yes<br />
+    <span>Method: </span><select name="method">
+      <option value="diamondSquare">Diamond Square</option>
+                          </select><br />
+    <span>Roughness: </span><input type="text" id="roughness" size="10" /><br />
+    <span>Smooth type: </span><select id="smoothType">
+      <option value="">None</option>
+      <option value="boxBlur">Box Blur</option>
+                          </select><br />
+    <span>Smooth iterations: </span><input type="text" id="smoothIter" size="10" /><br />
+    <span>Smooth radius: </span><input type="text" id="smoothRadius" size="10" /><br />
+    <input type="button" id="generate" value="Generate" />
+    <input type="button" id="seedGenerate" value="New Seed & Generate" /><br />
+    <br />
+    <span>Colors : </span><select id="colors">
+      <option value="colorMap">Color Map</option>
+      <option value="heightmap">Heightmap</option>
+      <option value="10ShadesMap">10 shades</option>
+      <option value="2ShadesMap">2 shades</option>
+      <option value="plasmaMap">Plasma</option>
+                            </select><br />
+    <input type="button" id="applyColors" value="Apply colors" /><br />
+    <br />
+    <input type="button" id="display3D" value="Display 3D" /><br />
+  </div>
+</body>
+</html>
