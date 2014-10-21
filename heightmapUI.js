@@ -16,7 +16,7 @@ var HeightmapUI = (function (_super) {
         if (typeof lowValue === "undefined") { lowValue = 0; }
         if (typeof highValue === "undefined") { highValue = 255; }
         if (typeof wrap === "undefined") { wrap = false; }
-        if (typeof algo === "undefined") { algo = "diamondSquareIter"; }
+        if (typeof algo === "undefined") { algo = "diamondSquare"; }
         if (typeof algoOptions === "undefined") { algoOptions = { roughness: 2 }; }
         if (typeof colors === "undefined") { colors = "heightmap"; }
         _super.call(this, dimX, dimY, lowValue, highValue, wrap, algo, algoOptions, smooth, smoothOptions);
@@ -104,7 +104,7 @@ var HeightmapUI = (function (_super) {
                 img.data[pixel++] = colorFill.r;
                 img.data[pixel++] = colorFill.g;
                 img.data[pixel++] = colorFill.b;
-                img.data[pixel++] = 255;
+                img.data[pixel++] = 255; // opaque alpha
             }
         }
 
@@ -142,6 +142,7 @@ var HeightmapUI = (function (_super) {
 
         var heightmap = event.data;
 
+        // WebGL compatibility check
         if (!Detector.webgl) {
             Detector.addGetWebGLMessage();
             heightmap.view3D.innerHTML = "";
@@ -272,11 +273,11 @@ var HeightmapUI = (function (_super) {
             context.putImageData(image, 0, 0);
 
             // Scaled 4x
-            var canvasScaled = document.createElement('canvas');
+            var canvasScaled = document.createElement("canvas");
             canvasScaled.width = width * 4;
             canvasScaled.height = height * 4;
 
-            context = canvasScaled.getContext('2d');
+            context = canvasScaled.getContext("2d");
             context.scale(4, 4);
             context.drawImage(canvas, 0, 0);
 
@@ -358,7 +359,7 @@ window.onload = function () {
     $("#width").val(heightmap.dimX.toString());
     if (heightmap.wrap)
         $("#wrapYes").attr("checked", "checked");
-else
+    else
         $("#wrapNo").attr("checked", "checked");
     $("#height").val(heightmap.dimY.toString());
     $("#colors").val(heightmap.colors.toString());

@@ -1,10 +1,10 @@
 class SeededRNG {
   randomSeedInit: number;
   randomSeed: number;
-  type: number;
+  type: string;
   _rand: () => number;
   rand: () => number;
-  distribution: number;
+  distribution: string;
 
   // Xorshift variables
   x: number;
@@ -20,31 +20,31 @@ class SeededRNG {
   mt: number[];
   mti: number;
 
-  constructor(randomSeed: number = Date.now(), type: number = 4, distribution: number = 0) {
+  constructor(randomSeed: number = Date.now(), type: string = "xorshift", distribution: string = "uniform") {
     this.randomSeedInit = randomSeed;
     this.randomSeed = randomSeed;
 
     this.type = type;
     switch (this.type) {
-      case -1:
+      case "javascript":
         this._rand = Math.random;
         break;
-      case 0:
+      case "central":
         this._rand = this.randCentral;
         break;
-      case 1:
+      case "randu":
         this._rand = this.randU;
         break;
-      case 2:
+      case "clib":
         this._rand = this.randCLib;
         break;
-      case 3:
+      case "mswin":
         this._rand = this.randMSWin;
         break;
-      case 4:
+      case "xorshift":
         this._rand = this.randXorshift;
         break;
-      case 5:
+      case "mersenne":
         this._rand = this.randMersenne;
         break;
       default:
@@ -53,20 +53,28 @@ class SeededRNG {
 
     this.distribution = distribution;
     switch (this.distribution) {
-      case 0:
+      case "uniform":
         this.rand = this._rand;
         break;
-      case 1:
+      case "gaussian":
         this.rand = this.randNorm;
         break;
       default:
         this.rand = this._rand;
     } // switch
 
+    this.reset();
+  } // constructor
+
+  reset(randomSeed?: number) {
+    this.randomSeed = randomSeed ? randomSeed : this.randomSeedInit;
+
     // Xorshift initialization
     this.x = 123456789;
     this.y = 362436069;
     this.z = 521288629;
+    for (var i = 0; i < 14; i++)
+      this.randXorshift(); // skip first random numbers which are not really random
 
     // Mersenne Twister initialization
     this.N = 624;
@@ -90,9 +98,9 @@ class SeededRNG {
       this.mt[this.mti] >>>= 0;
       /* for >32 bit machines */
     }
-  } // constructor
+  } // reset
 
-  // Normal (Gausian) distribution
+  // Normal (Gaussian) distribution
   // See: http://www.design.caltech.edu/erik/Misc/Gaussian.html
   randNorm() {
     var x1, x2, rad;

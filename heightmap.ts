@@ -25,7 +25,7 @@ class Heightmap {
 
   rng: SeededRNG;
 
-  constructor(dimX: number, dimY: number, lowValue: number = 0, highValue: number = 255, wrap: boolean = false, algo: string = "diamondSquareIter", algoOptions = { roughness: 2 }, smooth?: string, smoothOptions?: any, seed = Date.now()) {
+  constructor(dimX: number, dimY: number, lowValue: number = 0, highValue: number = 255, wrap: boolean = false, algo: string = "diamondSquare", algoOptions = { roughness: 2 }, smooth?: string, smoothOptions?: any, seed = Date.now()) {
     this.dimX = dimX;
     this.dimY = dimY;
     this.wrap = wrap;
@@ -42,7 +42,7 @@ class Heightmap {
   generate(): number[][] {
     console.time("generate");
 
-    this.rng = new SeededRNG(this.seed, 4); // Xorshift
+    this.rng = new SeededRNG(this.seed, "xorshift");
     this.map = [];
 
     switch (this.algo) {

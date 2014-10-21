@@ -1,32 +1,32 @@
 var SeededRNG = (function () {
     function SeededRNG(randomSeed, type, distribution) {
         if (typeof randomSeed === "undefined") { randomSeed = Date.now(); }
-        if (typeof type === "undefined") { type = 4; }
-        if (typeof distribution === "undefined") { distribution = 0; }
+        if (typeof type === "undefined") { type = "xorshift"; }
+        if (typeof distribution === "undefined") { distribution = "uniform"; }
         this.randomSeedInit = randomSeed;
         this.randomSeed = randomSeed;
 
         this.type = type;
         switch (this.type) {
-            case -1:
+            case "javascript":
                 this._rand = Math.random;
                 break;
-            case 0:
+            case "central":
                 this._rand = this.randCentral;
                 break;
-            case 1:
+            case "randu":
                 this._rand = this.randU;
                 break;
-            case 2:
+            case "clib":
                 this._rand = this.randCLib;
                 break;
-            case 3:
+            case "mswin":
                 this._rand = this.randMSWin;
                 break;
-            case 4:
+            case "xorshift":
                 this._rand = this.randXorshift;
                 break;
-            case 5:
+            case "mersenne":
                 this._rand = this.randMersenne;
                 break;
             default:
@@ -35,29 +35,36 @@ var SeededRNG = (function () {
 
         this.distribution = distribution;
         switch (this.distribution) {
-            case 0:
+            case "uniform":
                 this.rand = this._rand;
                 break;
-            case 1:
+            case "gaussian":
                 this.rand = this.randNorm;
                 break;
             default:
                 this.rand = this._rand;
         }
 
+        this.reset();
+    }
+    SeededRNG.prototype.reset = function (randomSeed) {
+        this.randomSeed = randomSeed ? randomSeed : this.randomSeedInit;
+
         // Xorshift initialization
         this.x = 123456789;
         this.y = 362436069;
         this.z = 521288629;
+        for (var i = 0; i < 14; i++)
+            this.randXorshift(); // skip first random numbers which are not really random
 
         // Mersenne Twister initialization
         this.N = 624;
         this.M = 397;
-        this.MATRIX_A = 0x9908b0df;
-        this.UPPER_MASK = 0x80000000;
-        this.LOWER_MASK = 0x7fffffff;
-        this.mt = new Array(this.N);
-        this.mti = this.N + 1;
+        this.MATRIX_A = 0x9908b0df; /* constant vector a */
+        this.UPPER_MASK = 0x80000000; /* most significant w-r bits */
+        this.LOWER_MASK = 0x7fffffff; /* least significant r bits */
+        this.mt = new Array(this.N); /* the array for the state vector */
+        this.mti = this.N + 1; /* mti==N+1 means mt[N] is not initialized */
 
         /* initializes mt[N] with a seed */
         this.mt[0] = this.randomSeed >>> 0;
@@ -72,8 +79,9 @@ var SeededRNG = (function () {
             this.mt[this.mti] >>>= 0;
             /* for >32 bit machines */
         }
-    }
-    // Normal (Gausian) distribution
+    };
+
+    // Normal (Gaussian) distribution
     // See: http://www.design.caltech.edu/erik/Misc/Gaussian.html
     SeededRNG.prototype.randNorm = function () {
         var x1, x2, rad;
@@ -106,7 +114,7 @@ var SeededRNG = (function () {
     // rand() function from C Standard Library
     SeededRNG.prototype.randCLib = function () {
         this.randomSeed = this.randomSeed * 1103515245 + 12345;
-        this.randomSeed = (this.randomSeed / 65536) % 32768;
+        this.randomSeed = (this.randomSeed / 65536) % 32768; // extract bits 30..16
 
         return this.randomSeed / 32767.0;
     };
@@ -115,7 +123,7 @@ var SeededRNG = (function () {
     // See: http://blog.olivier.coupelon.net/2008/02/microsoft-windows-default-random-number.html
     SeededRNG.prototype.randMSWin = function () {
         this.randomSeed = this.randomSeed * 214013 + 2531011;
-        this.randomSeed = (this.randomSeed / 65536) % 32768;
+        this.randomSeed = (this.randomSeed / 65536) % 32768; // extract bits 30..16
         return this.randomSeed / 32767.0;
     };
 
@@ -143,6 +151,7 @@ var SeededRNG = (function () {
         var y;
         var mag01 = new Array(0x0, this.MATRIX_A);
 
+        /* mag01[x] = x * MATRIX_A for x=0,1 */
         if (this.mti >= this.N) {
             var kk;
 

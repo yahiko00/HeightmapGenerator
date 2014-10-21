@@ -12,7 +12,7 @@ var Heightmap = (function () {
         if (typeof lowValue === "undefined") { lowValue = 0; }
         if (typeof highValue === "undefined") { highValue = 255; }
         if (typeof wrap === "undefined") { wrap = false; }
-        if (typeof algo === "undefined") { algo = "diamondSquareIter"; }
+        if (typeof algo === "undefined") { algo = "diamondSquare"; }
         if (typeof algoOptions === "undefined") { algoOptions = { roughness: 2 }; }
         if (typeof seed === "undefined") { seed = Date.now(); }
         this.dimX = dimX;
@@ -30,7 +30,7 @@ var Heightmap = (function () {
     Heightmap.prototype.generate = function () {
         console.time("generate");
 
-        this.rng = new SeededRNG(this.seed, 4);
+        this.rng = new SeededRNG(this.seed, "xorshift");
         this.map = [];
 
         switch (this.algo) {
