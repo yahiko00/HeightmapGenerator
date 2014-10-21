@@ -3,7 +3,7 @@
 class DiamondSquare {
   rng: SeededRNG;
 
-  constructor(rng: SeededRNG = new SeededRNG) {
+  constructor(rng: SeededRNG = new SeededRNG()) {
     this.rng = rng;
   }
 

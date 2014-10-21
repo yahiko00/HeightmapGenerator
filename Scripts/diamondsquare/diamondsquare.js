@@ -17,10 +17,10 @@ var DiamondSquare = (function () {
         }
 
         // Initialize the corners of the map
-        map[0][0] = low + this.rng.rand() * (high - low);
-        map[0][MAP_SIZE - 1] = low + this.rng.rand() * (high - low);
-        map[MAP_SIZE - 1][0] = low + this.rng.rand() * (high - low);
-        map[MAP_SIZE - 1][MAP_SIZE - 1] = low + this.rng.rand() * (high - low);
+        map[0][0] = low + this.rng.rand() * (high - low); // top left
+        map[0][MAP_SIZE - 1] = low + this.rng.rand() * (high - low); // bottom left
+        map[MAP_SIZE - 1][0] = low + this.rng.rand() * (high - low); // top right
+        map[MAP_SIZE - 1][MAP_SIZE - 1] = low + this.rng.rand() * (high - low); // bottom right
 
         var h = low + (high - low) / 2;
 
@@ -57,6 +57,7 @@ var DiamondSquare = (function () {
                     // update value for center of diamond
                     map[x][y] = avg;
 
+                    // wrap values on the edges
                     if (wrap) {
                         if (x == 0)
                             map[MAP_SIZE - 1][y] = avg;
@@ -84,6 +85,5 @@ var DiamondSquare = (function () {
         return Math.max(Math.min(value, high), low);
     };
     return DiamondSquare;
-})();// DiamondSquare
-
+})(); // DiamondSquare
 //# sourceMappingURL=diamondsquare.js.map
