@@ -4,8 +4,6 @@
 // Generate random heightmaps
 
 // TODO : 
-// * Appel à une seed
-// * Smooth
 // * 8-bit / 16-bit
 // * Export de fichiers (Windows / Mac)
 // * Autres algos : Perlin
