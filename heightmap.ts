@@ -1,5 +1,6 @@
 ﻿/// <reference path="Scripts/rng/rng.ts"/>
 /// <reference path="Scripts/diamondsquare/diamondsquare.ts"/>
+/// <reference path="Scripts/boxblur/boxblur.ts"/>
 
 // Generate random heightmaps
 
@@ -61,7 +62,7 @@ class Heightmap {
 
     switch (this.smooth) {
       case "boxBlur":
-        this.boxBlur();
+        boxBlur(this.map, this.smoothOptions.radius);
         break;
       default:
     } // switch
@@ -70,30 +71,6 @@ class Heightmap {
 
     return this.map
   } // generate
-
-  // See: http://blog.ivank.net/fastest-gaussian-blur.html
-  boxBlur() {
-    var radius = this.smoothOptions.radius;
-    var result: number[][] = [];
-    var temp: number[] = [];
-
-    for (var i = 0; i < this.dimX; i++) {
-      temp = [];
-      for (var j = 0; j < this.dimY; j++) {
-        var val = 0;
-        for (var iy = j - radius; iy < j + radius + 1; iy++) {
-          for (var ix = i - radius; ix < i + radius + 1; ix++) {
-            var x = Math.min(this.dimX - 1, Math.max(0, ix));
-            var y = Math.min(this.dimY - 1, Math.max(0, iy));
-            val += this.map[x][y];
-          } // for ix
-        } // for iy
-        temp.push(val / ((radius + radius + 1) * (radius + radius + 1)));
-      } // for j
-      result.push(temp);
-    } // for i
-    this.map = result;
-  } // boxBlur
 
   // Return a one-dimension map
   linearMap(): number[] {

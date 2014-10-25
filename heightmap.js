@@ -1,5 +1,6 @@
 /// <reference path="Scripts/rng/rng.ts"/>
 /// <reference path="Scripts/diamondsquare/diamondsquare.ts"/>
+/// <reference path="Scripts/boxblur/boxblur.ts"/>
 // Generate random heightmaps
 // TODO : 
 // * 8-bit / 16-bit
@@ -42,35 +43,13 @@ var Heightmap = (function () {
         }
         switch (this.smooth) {
             case "boxBlur":
-                this.boxBlur();
+                boxBlur(this.map, this.smoothOptions.radius);
                 break;
             default:
         }
         console.timeEnd("generate");
         return this.map;
     }; // generate
-    // See: http://blog.ivank.net/fastest-gaussian-blur.html
-    Heightmap.prototype.boxBlur = function () {
-        var radius = this.smoothOptions.radius;
-        var result = [];
-        var temp = [];
-        for (var i = 0; i < this.dimX; i++) {
-            temp = [];
-            for (var j = 0; j < this.dimY; j++) {
-                var val = 0;
-                for (var iy = j - radius; iy < j + radius + 1; iy++) {
-                    for (var ix = i - radius; ix < i + radius + 1; ix++) {
-                        var x = Math.min(this.dimX - 1, Math.max(0, ix));
-                        var y = Math.min(this.dimY - 1, Math.max(0, iy));
-                        val += this.map[x][y];
-                    }
-                }
-                temp.push(val / ((radius + radius + 1) * (radius + radius + 1)));
-            }
-            result.push(temp);
-        }
-        this.map = result;
-    }; // boxBlur
     // Return a one-dimension map
     Heightmap.prototype.linearMap = function () {
         var data = [];
