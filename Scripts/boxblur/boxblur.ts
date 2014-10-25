@@ -13,8 +13,8 @@ function boxBlur(map: number[][], radius: number): number[][]{
       var val = 0;
       for (var iy = j - radius; iy < j + radius + 1; iy++) {
         for (var ix = i - radius; ix < i + radius + 1; ix++) {
-          var x = Math.min(this.dimX - 1, Math.max(0, ix));
-          var y = Math.min(this.dimY - 1, Math.max(0, iy));
+          var x = Math.min(dimX - 1, Math.max(0, ix));
+          var y = Math.min(dimY - 1, Math.max(0, iy));
           val += map[x][y];
         } // for ix
       } // for iy

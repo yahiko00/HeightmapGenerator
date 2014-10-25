@@ -43,7 +43,7 @@ var Heightmap = (function () {
         }
         switch (this.smooth) {
             case "boxBlur":
-                boxBlur(this.map, this.smoothOptions.radius);
+                this.map = boxBlur(this.map, this.smoothOptions.radius);
                 break;
             default:
         }
